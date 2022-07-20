@@ -237,11 +237,6 @@ for input_path in args.files:
         f.write(str(peds))
     log_artifacts("outputs")
 
-<<<<<<< HEAD
-        #append id to list 
-        #check if id is in list if not then add 
-        #print length of list at each frame 
-=======
     #with open('count.yml', 'w') as yaml_file:
     #    yaml.dump(peds, stream=yaml_file, default_flow_style=False)
     #with open('count.txt', 'w') as file:
@@ -252,7 +247,6 @@ for input_path in args.files:
             #check if id is in list if not then add 
             #print length of list at each frame 
         
->>>>>>> 7a86dd9d0321ba2a8cb71ae14f72365d0a2a1d37
 
 
 
