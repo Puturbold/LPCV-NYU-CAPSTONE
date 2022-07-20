@@ -6,6 +6,9 @@ import torch
 import torchvision.ops.boxes as bops
 import yolov5
 import pandas as pd 
+import datetime
+import yaml
+import json
 
 import norfair
 from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
@@ -199,7 +202,8 @@ for input_path in args.files:
                 #print(type(obj.estimate[0]))
                 #start with ID - Location dictionary 
                 #add in time 
-                peds[obj.id].append(obj.estimate[0])
+                now = datetime.datetime.now()
+                peds[obj.id].append((obj.estimate[0],now.time()))
                 #print(type(peds.loc[peds.ID == obj.id]['Locations']))
                 #peds.loc[peds.ID == obj.id]['Locations']+=tuple(obj.estimate[0])
                 #obj.estimate is array 
@@ -207,9 +211,13 @@ for input_path in args.files:
             else:
                 count += 1
                 #add new key and value 
-                peds[obj.id] = [obj.estimate[0]]
+
+                now = datetime.datetime.now()
+                peds[obj.id] = [(obj.estimate[0],now.time())]
+
+                #now = datetime.datetime.now()
                 #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
-                
+                #tity
                 #this is not working - increasing count too much somehow? 
                 #peds.append((obj.id,obj.estimate))
                 #estimate is x and y --> impute time of each - fast way to do this? 
@@ -221,6 +229,12 @@ for input_path in args.files:
     #currently counting each person each frame 
     with open('count.txt', 'w') as f:
         f.write(str(peds))
+
+    #with open('count.yml', 'w') as yaml_file:
+    #    yaml.dump(peds, stream=yaml_file, default_flow_style=False)
+    #with open('count.txt', 'w') as file:
+    #    file.write(json.dumps(peds.tolist()))
+
 
             #append id to list 
             #check if id is in list if not then add 
