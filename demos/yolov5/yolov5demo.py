@@ -220,7 +220,6 @@ for frame in video:
 
             #now = datetime.datetime.now()
             #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
-            #tity
             #this is not working - increasing count too much somehow? 
             #peds.append((obj.id,obj.estimate))
             #estimate is x and y --> impute time of each - fast way to do this? 
@@ -236,45 +235,4 @@ if not os.path.exists("outputs"):
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
 log_artifacts("outputs")
-
-<<<<<<< HEAD
-                now = datetime.datetime.now()
-                peds[obj.id] = [(obj.estimate[0],now.time())]
-
-                #now = datetime.datetime.now()
-                #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
-                #tity
-                #this is not working - increasing count too much somehow? 
-                #peds.append((obj.id,obj.estimate))
-                #estimate is x and y --> impute time of each - fast way to do this? 
-                #then add to dataframe then write data frame 
-        print(count)
-        #save dataframe
-    print(peds)
-    #worth it to try getting shape of dataframe? - num of unique IDs?
-    #currently counting each person each frame          
-    # Log an artifact (output file)
-    if not os.path.exists("outputs"):
-        os.makedirs("outputs")
-    with open("outputs/count.txt", "w") as f:
-        f.write(str(peds))
-    log_artifacts("outputs")
-
-    #with open('count.yml', 'w') as yaml_file:
-    #    yaml.dump(peds, stream=yaml_file, default_flow_style=False)
-    #with open('count.txt', 'w') as file:
-    #    file.write(json.dumps(peds.tolist()))
-
-
-            #append id to list 
-            #check if id is in list if not then add 
-            #print length of list at each frame 
-        
-=======
-    #append id to list 
-    #check if id is in list if not then add 
-    #print length of list at each frame 
->>>>>>> 4cc5478104d4912d2e77ee4afc48a8fc963f79a9
-
-
 
