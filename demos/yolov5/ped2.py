@@ -11,7 +11,7 @@ import yaml
 import json
 
 import os
-from mlflow import log_metric, log_param, log_artifacts
+#from mlflow import log_metric, log_param, log_artifacts
 
 import norfair
 from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
@@ -144,7 +144,8 @@ def yolo_detections_to_norfair_detections(
 
 
 parser = argparse.ArgumentParser(description="Track objects in a video.")
-parser.add_argument("files", type=str, nargs="+", help="Video files to process")
+parser.add_argument("--files", type=str, nargs="+", help="Video files to process")
+#parser.add_argument("files", type=str, nargs="+", help="Video files to process")
 parser.add_argument("--detector_path", type=str, default="yolov5m6.pt", help="YOLOv5 model path")
 parser.add_argument("--img_size", type=int, default="720", help="YOLOv5 inference size (pixels)")
 parser.add_argument("--conf_thres", type=float, default="0.25", help="YOLOv5 object confidence threshold")
@@ -152,14 +153,19 @@ parser.add_argument("--iou_thresh", type=float, default="0.45", help="YOLOv5 IOU
 parser.add_argument("--classes", nargs="+", type=int, help="Filter by class: --classes 0, or --classes 0 2 3")
 parser.add_argument("--device", type=str, default=None, help="Inference device: 'cpu' or 'cuda'")
 parser.add_argument("--track_points", type=str, default="centroid", help="Track points: 'centroid' or 'bbox'")
+parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
+
 args = parser.parse_args()
 
 model = YOLO(args.detector_path, device=args.device)
 
 #need to figure out embedded way to make this camera - pass argument 
-input_path = args.files
-video = Video(input_path = input_path)
+##input_path = args.files
+##video = Video(input_path = input_path)
 #may want to incorporate some time thing here so saving data every 5-10
+video = Video(camera=0)
+video =Video(input_path=args.video)  if args.video != "0" else video 
+
 
 distance_function = iou if args.track_points == "bbox" else euclidean_distance
 distance_threshold = (
@@ -235,46 +241,10 @@ if not os.path.exists("outputs"):
     os.makedirs("outputs")
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
-log_artifacts("outputs")
+#log_artifacts("outputs")
 
-<<<<<<< HEAD
-                now = datetime.datetime.now()
-                peds[obj.id] = [(obj.estimate[0],now.time())]
-
-                #now = datetime.datetime.now()
-                #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
-                #tity
-                #this is not working - increasing count too much somehow? 
-                #peds.append((obj.id,obj.estimate))
-                #estimate is x and y --> impute time of each - fast way to do this? 
-                #then add to dataframe then write data frame 
-        print(count)
-        #save dataframe
-    print(peds)
-    #worth it to try getting shape of dataframe? - num of unique IDs?
-    #currently counting each person each frame          
-    # Log an artifact (output file)
-    if not os.path.exists("outputs"):
-        os.makedirs("outputs")
-    with open("outputs/count.txt", "w") as f:
-        f.write(str(peds))
-    log_artifacts("outputs")
-
-    #with open('count.yml', 'w') as yaml_file:
-    #    yaml.dump(peds, stream=yaml_file, default_flow_style=False)
-    #with open('count.txt', 'w') as file:
-    #    file.write(json.dumps(peds.tolist()))
-
-
-            #append id to list 
-            #check if id is in list if not then add 
-            #print length of list at each frame 
-        
-=======
     #append id to list 
     #check if id is in list if not then add 
     #print length of list at each frame 
->>>>>>> 4cc5478104d4912d2e77ee4afc48a8fc963f79a9
-
 
 
