@@ -5,9 +5,10 @@ import numpy as np
 import torch
 import torchvision.ops.boxes as bops
 import yolov5
+import pandas as pd 
 
 import norfair
-from norfair import Detection, Tracker, Video, Paths
+from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
 
 DISTANCE_THRESHOLD_BBOX: float = 3.33
 DISTANCE_THRESHOLD_CENTROID: int = 30
@@ -149,22 +150,29 @@ args = parser.parse_args()
 
 model = YOLO(args.detector_path, device=args.device)
 
+#need to figure out embedded way to make this camera - pass argument 
 for input_path in args.files:
-    video = Video(input_path=input_path)
+    video = Video(input_path = input_path)
+    #may want to incorporate some time thing here so saving data every 5-10
 
     distance_function = iou if args.track_points == "bbox" else euclidean_distance
     distance_threshold = (
-        DISTANCE_THRESHOLD_BBOX
-        if args.track_points == "bbox"
-        else DISTANCE_THRESHOLD_CENTROID
+    DISTANCE_THRESHOLD_BBOX
+    if args.track_points == "bbox"
+    else DISTANCE_THRESHOLD_CENTROID
     )
 
     tracker = Tracker(
-        distance_function=distance_function,
-        distance_threshold=distance_threshold,
+    distance_function=distance_function,
+    distance_threshold=distance_threshold,
     )
     paths_drawer = Paths(center, attenuation=0.01)
 
+    #initiating way to save 
+    #gonna try dictionary 
+    #peds = pd.DataFrame(columns=['ID','Locations'])
+    peds = {}
+    count = 0
     for frame in video:
         yolo_detections = model(
             frame,
@@ -183,3 +191,41 @@ for input_path in args.files:
             norfair.draw_tracked_boxes(frame, tracked_objects)
         frame = paths_drawer.draw(frame, tracked_objects)
         video.write(frame)
+        #modify print obejcts as table to print ongoing count 
+        #print_objects_as_table(tracked_objects)
+        for obj in tracked_objects:
+            if obj.id in peds.keys():
+                #peds.loc[peds.ID == obj.id, peds.Locations] += [obj.estimate]
+                #print(type(obj.estimate[0]))
+                #start with ID - Location dictionary 
+                #add in time 
+                peds[obj.id].append(obj.estimate[0])
+                #print(type(peds.loc[peds.ID == obj.id]['Locations']))
+                #peds.loc[peds.ID == obj.id]['Locations']+=tuple(obj.estimate[0])
+                #obj.estimate is array 
+                #peds.loc[peds.ID == obj.id]['Locations'] is series 
+            else:
+                count += 1
+                #add new key and value 
+                peds[obj.id] = [obj.estimate[0]]
+                #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
+                
+                #this is not working - increasing count too much somehow? 
+                #peds.append((obj.id,obj.estimate))
+                #estimate is x and y --> impute time of each - fast way to do this? 
+                #then add to dataframe then write data frame 
+        print(count)
+        #save dataframe
+    print(peds)
+    #worth it to try getting shape of dataframe? - num of unique IDs?
+    #currently counting each person each frame 
+    with open('count.txt', 'w') as f:
+        f.write(str(peds))
+
+            #append id to list 
+            #check if id is in list if not then add 
+            #print length of list at each frame 
+        
+
+
+
