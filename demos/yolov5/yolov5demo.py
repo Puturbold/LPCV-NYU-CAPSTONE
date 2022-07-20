@@ -157,102 +157,89 @@ args = parser.parse_args()
 model = YOLO(args.detector_path, device=args.device)
 
 #need to figure out embedded way to make this camera - pass argument 
-for input_path in args.files:
-    video = Video(input_path = input_path)
-    #may want to incorporate some time thing here so saving data every 5-10
+input_path = args.files
+video = Video(input_path = input_path)
+#may want to incorporate some time thing here so saving data every 5-10
 
-    distance_function = iou if args.track_points == "bbox" else euclidean_distance
-    distance_threshold = (
-    DISTANCE_THRESHOLD_BBOX
-    if args.track_points == "bbox"
-    else DISTANCE_THRESHOLD_CENTROID
+distance_function = iou if args.track_points == "bbox" else euclidean_distance
+distance_threshold = (
+DISTANCE_THRESHOLD_BBOX
+if args.track_points == "bbox"
+else DISTANCE_THRESHOLD_CENTROID
+)
+
+tracker = Tracker(
+distance_function=distance_function,
+distance_threshold=distance_threshold,
+)
+paths_drawer = Paths(center, attenuation=0.01)
+
+#initiating way to save 
+#gonna try dictionary 
+#peds = pd.DataFrame(columns=['ID','Locations'])
+peds = {}
+count = 0
+for frame in video:
+    yolo_detections = model(
+        frame,
+        conf_threshold=args.conf_thres,
+        iou_threshold=args.iou_thresh,
+        image_size=args.img_size,
+        classes=args.classes
     )
+    detections = yolo_detections_to_norfair_detections(yolo_detections, track_points=args.track_points)
+    tracked_objects = tracker.update(detections=detections)
+    if args.track_points == "centroid":
+        norfair.draw_points(frame, detections)
+        norfair.draw_tracked_objects(frame, tracked_objects)
+    elif args.track_points == "bbox":
+        norfair.draw_boxes(frame, detections)
+        norfair.draw_tracked_boxes(frame, tracked_objects)
+    frame = paths_drawer.draw(frame, tracked_objects)
+    video.write(frame)
+    #modify print obejcts as table to print ongoing count 
+    #print_objects_as_table(tracked_objects)
+    for obj in tracked_objects:
+        if obj.id in peds.keys():
+            #peds.loc[peds.ID == obj.id, peds.Locations] += [obj.estimate]
+            #print(type(obj.estimate[0]))
+            #start with ID - Location dictionary 
+            #add in time 
+            now = datetime.datetime.now()
+            peds[obj.id].append((obj.estimate[0],now.time()))
+            #print(type(peds.loc[peds.ID == obj.id]['Locations']))
+            #peds.loc[peds.ID == obj.id]['Locations']+=tuple(obj.estimate[0])
+            #obj.estimate is array 
+            #peds.loc[peds.ID == obj.id]['Locations'] is series 
+        else:
+            count += 1
+            #add new key and value 
 
-    tracker = Tracker(
-    distance_function=distance_function,
-    distance_threshold=distance_threshold,
-    )
-    paths_drawer = Paths(center, attenuation=0.01)
+            now = datetime.datetime.now()
+            peds[obj.id] = [(obj.estimate[0],now.time())]
 
-    #initiating way to save 
-    #gonna try dictionary 
-    #peds = pd.DataFrame(columns=['ID','Locations'])
-    peds = {}
-    count = 0
-    for frame in video:
-        yolo_detections = model(
-            frame,
-            conf_threshold=args.conf_thres,
-            iou_threshold=args.iou_thresh,
-            image_size=args.img_size,
-            classes=args.classes
-        )
-        detections = yolo_detections_to_norfair_detections(yolo_detections, track_points=args.track_points)
-        tracked_objects = tracker.update(detections=detections)
-        if args.track_points == "centroid":
-            norfair.draw_points(frame, detections)
-            norfair.draw_tracked_objects(frame, tracked_objects)
-        elif args.track_points == "bbox":
-            norfair.draw_boxes(frame, detections)
-            norfair.draw_tracked_boxes(frame, tracked_objects)
-        frame = paths_drawer.draw(frame, tracked_objects)
-        video.write(frame)
-        #modify print obejcts as table to print ongoing count 
-        #print_objects_as_table(tracked_objects)
-        for obj in tracked_objects:
-            if obj.id in peds.keys():
-                #peds.loc[peds.ID == obj.id, peds.Locations] += [obj.estimate]
-                #print(type(obj.estimate[0]))
-                #start with ID - Location dictionary 
-                #add in time 
-                now = datetime.datetime.now()
-                peds[obj.id].append((obj.estimate[0],now.time()))
-                #print(type(peds.loc[peds.ID == obj.id]['Locations']))
-                #peds.loc[peds.ID == obj.id]['Locations']+=tuple(obj.estimate[0])
-                #obj.estimate is array 
-                #peds.loc[peds.ID == obj.id]['Locations'] is series 
-            else:
-                count += 1
-                #add new key and value 
+            #now = datetime.datetime.now()
+            #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
+            #tity
+            #this is not working - increasing count too much somehow? 
+            #peds.append((obj.id,obj.estimate))
+            #estimate is x and y --> impute time of each - fast way to do this? 
+            #then add to dataframe then write data frame 
+    print(count)
+    #save dataframe
+print(peds)
+#worth it to try getting shape of dataframe? - num of unique IDs?
+#currently counting each person each frame          
+# Log an artifact (output file)
+if not os.path.exists("outputs"):
+    os.makedirs("outputs")
+with open("outputs/count.txt", "w") as f:
+    f.write(str(peds))
+log_artifacts("outputs")
 
-                now = datetime.datetime.now()
-                peds[obj.id] = [(obj.estimate[0],now.time())]
-
-                #now = datetime.datetime.now()
-                #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
-                #tity
-                #this is not working - increasing count too much somehow? 
-                #peds.append((obj.id,obj.estimate))
-                #estimate is x and y --> impute time of each - fast way to do this? 
-                #then add to dataframe then write data frame 
-        print(count)
-        #save dataframe
-    print(peds)
-    #worth it to try getting shape of dataframe? - num of unique IDs?
-    #currently counting each person each frame          
-    # Log an artifact (output file)
-    if not os.path.exists("outputs"):
-        os.makedirs("outputs")
-    with open("outputs/count.txt", "w") as f:
-        f.write(str(peds))
-    log_artifacts("outputs")
-
-<<<<<<< HEAD
-        #append id to list 
-        #check if id is in list if not then add 
-        #print length of list at each frame 
-=======
-    #with open('count.yml', 'w') as yaml_file:
-    #    yaml.dump(peds, stream=yaml_file, default_flow_style=False)
-    #with open('count.txt', 'w') as file:
-    #    file.write(json.dumps(peds.tolist()))
-
-
-            #append id to list 
-            #check if id is in list if not then add 
-            #print length of list at each frame 
-        
->>>>>>> 7a86dd9d0321ba2a8cb71ae14f72365d0a2a1d37
+    #append id to list 
+    #check if id is in list if not then add 
+    #print length of list at each frame 
 
 
 
