@@ -7,6 +7,9 @@ import torchvision.ops.boxes as bops
 import yolov5
 import pandas as pd 
 
+import os
+from mlflow import log_metric, log_param, log_artifacts
+
 import norfair
 from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
 
@@ -218,14 +221,17 @@ for input_path in args.files:
         #save dataframe
     print(peds)
     #worth it to try getting shape of dataframe? - num of unique IDs?
-    #currently counting each person each frame 
-    with open('count.txt', 'w') as f:
+    #currently counting each person each frame          
+    # Log an artifact (output file)
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs")
+    with open("outputs/count.txt", "w") as f:
         f.write(str(peds))
+    log_artifacts("outputs")
 
-            #append id to list 
-            #check if id is in list if not then add 
-            #print length of list at each frame 
-        
+        #append id to list 
+        #check if id is in list if not then add 
+        #print length of list at each frame 
 
 
 
