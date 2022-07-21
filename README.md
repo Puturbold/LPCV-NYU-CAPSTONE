@@ -1,4 +1,6 @@
-![NYC Sponsor Logos](docs/NYC_MOCT.png, docs/NYCDOT.svg)
+![NYC Sponsor Logos](docs/NYC_MOCT.png)
+![NYC DOT Logo](docs/NYCDOT.svg)
+![NYU CUSP logo](docs/NYU_CUSP.png)
 
 
 
