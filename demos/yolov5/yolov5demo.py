@@ -14,9 +14,7 @@ import os
 from mlflow import log_metric, log_param, log_artifacts
 
 import norfair
-from norfair.tracker import Detection, Tracker
-from norfair.video import Video
-from norfair.drawing import Paths
+from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
 
 DISTANCE_THRESHOLD_BBOX: float = 3.33
 DISTANCE_THRESHOLD_CENTROID: int = 30
@@ -54,13 +52,6 @@ class YOLO:
 
 def euclidean_distance(detection, tracked_object):
     return np.linalg.norm(detection.points - tracked_object.estimate)
-
-def crop_image(image, x, y, width, height):
-    """
-    image: a cv2 frame
-    x, y, width, height: the region to cut out
-    """
-    return image[y:y + height, x:x + width]
 
 
 def center(points):
@@ -153,7 +144,7 @@ def yolo_detections_to_norfair_detections(
 
 
 parser = argparse.ArgumentParser(description="Track objects in a video.")
-#parser.add_argument("files", type=str, nargs="+", help="Video files to process")
+parser.add_argument("files", type=str, nargs="+", help="Video files to process")
 parser.add_argument("--detector_path", type=str, default="yolov5m6.pt", help="YOLOv5 model path")
 parser.add_argument("--img_size", type=int, default="720", help="YOLOv5 inference size (pixels)")
 parser.add_argument("--conf_thres", type=float, default="0.25", help="YOLOv5 object confidence threshold")
@@ -161,17 +152,14 @@ parser.add_argument("--iou_thresh", type=float, default="0.45", help="YOLOv5 IOU
 parser.add_argument("--classes", nargs="+", type=int, help="Filter by class: --classes 0, or --classes 0 2 3")
 parser.add_argument("--device", type=str, default=None, help="Inference device: 'cpu' or 'cuda'")
 parser.add_argument("--track_points", type=str, default="centroid", help="Track points: 'centroid' or 'bbox'")
-parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
 args = parser.parse_args()
 
 model = YOLO(args.detector_path, device=args.device)
 
 #need to figure out embedded way to make this camera - pass argument 
-##input_path = args.files
-##video = Video(input_path = input_path)
+input_path = args.files
+video = Video(input_path = input_path)
 #may want to incorporate some time thing here so saving data every 5-10
-video = Video(camera=0)
-video =Video(input_path=args.video)  if args.video != "0" else video 
 
 distance_function = iou if args.track_points == "bbox" else euclidean_distance
 distance_threshold = (
@@ -192,8 +180,6 @@ paths_drawer = Paths(center, attenuation=0.01)
 peds = {}
 count = 0
 for frame in video:
-    #check if this is making it a lot slower 
-    frame = crop_image(frame,350,350,650,500)
     yolo_detections = model(
         frame,
         conf_threshold=args.conf_thres,
@@ -234,10 +220,12 @@ for frame in video:
 
             #now = datetime.datetime.now()
             #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
+            #tity
             #this is not working - increasing count too much somehow? 
             #peds.append((obj.id,obj.estimate))
             #estimate is x and y --> impute time of each - fast way to do this? 
             #then add to dataframe then write data frame 
+            
     print(count)
     #save dataframe
 print(peds)
@@ -249,4 +237,10 @@ if not os.path.exists("outputs"):
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
 log_artifacts("outputs")
+
+    #append id to list 
+    #check if id is in list if not then add 
+    #print length of list at each frame 
+
+
 
