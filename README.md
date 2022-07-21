@@ -1,4 +1,4 @@
-![NYC Sponsor Logos](docs/NYC_MOCT.png)![NYC DOT Logo](docs/nyc-dot-logo.png)![NYU CUSP logo](docs/NYU_CUSP.png)
+![NYC Sponsor Logos](docs/NYC_MOCT.png = 250x250)![NYC DOT Logo](docs/nyc-dot-logo.png=250x250)![NYU CUSP logo](docs/NYU_CUSP_logo.png = 250x250)
 
 ## Features
 
