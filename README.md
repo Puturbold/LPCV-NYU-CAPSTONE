@@ -1,10 +1,6 @@
-![Norfair by Tryolabs logo](docs/logo.png)
+![NYC Sponsor Logos](docs/NYC_MOCT.png)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tryolabs/norfair/blob/master/demos/yolov4/yolov4_demo.ipynb) [![Documentation](https://img.shields.io/badge/api-reference-blue?logo=readthedocs)](https://github.com/tryolabs/norfair/blob/master/docs/README.md) [![Board](https://img.shields.io/badge/project-board-blue?logo=github)](https://github.com/tryolabs/norfair/projects/1) ![Build status](https://github.com/tryolabs/norfair/workflows/CI/badge.svg?branch=master) [![DOI](https://zenodo.org/badge/276473370.svg)](https://zenodo.org/badge/latestdoi/276473370)
 
-Norfair is a customizable lightweight Python library for real-time 2D object tracking.
-
-Using Norfair, you can add tracking capabilities to any detector with just a few lines of code.
 
 ## Features
 
