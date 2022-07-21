@@ -13,7 +13,9 @@ import json
 import os
 from mlflow import log_metric, log_param, log_artifacts
 
-from norfair import Detection, Tracker, Video, Paths, print_objects_as_table
+from norfair.tracker import Detection, Tracker
+from norfair.video import Video
+from norfair.drawing import Paths
 
 DISTANCE_THRESHOLD_BBOX: float = 3.33
 DISTANCE_THRESHOLD_CENTROID: int = 30
