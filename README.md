@@ -1,4 +1,4 @@
-![NYC Sponsor Logos](docs/NYC_MOCT.png)
+![NYC Sponsor Logos](docs/NYC_MOCT.png, docs/NYCDOT.svg)
 
 
 
