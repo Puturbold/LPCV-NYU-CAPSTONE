@@ -72,6 +72,7 @@ class Video:
         )
         self.input_height = self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.input_width = self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
+
         self.frame_counter = 0
 
         # Setup progressbar

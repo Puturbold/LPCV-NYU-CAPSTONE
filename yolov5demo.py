@@ -38,7 +38,7 @@ class YOLO:
     def __call__(
         self,
         img: Union[str, np.ndarray],
-        conf_threshold: float = 0.25,
+        conf_threshold: float = 0.50,
         iou_threshold: float = 0.45,
         image_size: int = 720,
         classes: Optional[List[int]] = None
@@ -54,6 +54,13 @@ class YOLO:
 
 def euclidean_distance(detection, tracked_object):
     return np.linalg.norm(detection.points - tracked_object.estimate)
+
+def crop_image(image, x, y, width, height):
+    """
+    image: a cv2 frame
+    x, y, width, height: the region to cut out
+    """
+    return image[y:y + height, x:x + width]
 
 
 def center(points):
@@ -185,6 +192,8 @@ paths_drawer = Paths(center, attenuation=0.01)
 peds = {}
 count = 0
 for frame in video:
+    #check if this is making it a lot slower 
+    frame = crop_image(frame,200,390,800,720)
     yolo_detections = model(
         frame,
         conf_threshold=args.conf_thres,
@@ -232,12 +241,24 @@ for frame in video:
     print(count)
     #save dataframe
 print(peds)
+
+
+#mlflow metrics
+log_metric('counts',count)
+
+#mlfow parameters
+log_param('ROI_dim', (200,390,800,720))
+log_param('detector_path',args.detector_path)
+log_param('device', args.device)
+log_param('conf_threshold', args.conf_threshold)
+log_param('iou_threshold', args.iou_threshold)
+
 #worth it to try getting shape of dataframe? - num of unique IDs?
 #currently counting each person each frame          
 # Log an artifact (output file)
 if not os.path.exists("outputs"):
     os.makedirs("outputs")
+#include aggregate count in count.txt
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
 log_artifacts("outputs")
-

@@ -1,6 +1,6 @@
-<img src="docs/NYC_MOCT.png" alt="NYC MOCT Logos" width="250">
-<img src="docs/nyc-dot-logo.png" alt="NYC DOT Logo" width="250">
-<img src="docs/NYU-Emblem.png" alt="NYU CUSP logo" width="250">
+<img src="docs/NYC_MOCT.png" alt="NYC MOCT Logos" width="200">
+<img src="docs/nyc-dot-logo.png" alt="NYC DOT Logo" width="200">
+<img src="docs/NYU-Emblem.png" alt="NYU CUSP logo" width="200">
 
 ## Features
 
