@@ -162,6 +162,7 @@ parser.add_argument("--classes", nargs="+", type=int, help="Filter by class: --c
 parser.add_argument("--device", type=str, default=None, help="Inference device: 'cpu' or 'cuda'")
 parser.add_argument("--track_points", type=str, default="centroid", help="Track points: 'centroid' or 'bbox'")
 parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
+parser.add_argument("--init_delay", type=int, default=None, help="Detection Initialization Delay -  must be less than hit_counter_max (15)")
 args = parser.parse_args()
 
 model = YOLO(args.detector_path, device=args.device)
@@ -180,9 +181,11 @@ if args.track_points == "bbox"
 else DISTANCE_THRESHOLD_CENTROID
 )
 
+#added arg and param for initialization delay 
 tracker = Tracker(
 distance_function=distance_function,
 distance_threshold=distance_threshold,
+initialization_delay=args.init_delay
 )
 paths_drawer = Paths(center, attenuation=0.01)
 
@@ -250,12 +253,15 @@ log_metric('counts',count)
 log_param('ROI_dim', (200,390,800,720))
 log_param('detector_path',args.detector_path)
 log_param('device', args.device)
-log_param('conf_threshold', args.conf_threshold)
-log_param('iou_threshold', args.iou_threshold)
+log_param('conf_threshold', args.conf_thres)
+log_param('iou_threshold', args.iou_thresh)
+log_param('initialization_delay', args.init_delay)
+
 
 #worth it to try getting shape of dataframe? - num of unique IDs?
 #currently counting each person each frame          
 # Log an artifact (output file)
+#
 if not os.path.exists("outputs"):
     os.makedirs("outputs")
 #include aggregate count in count.txt
