@@ -240,7 +240,7 @@ for frame in video:
             #this is not working - increasing count too much somehow? 
             #peds.append((obj.id,obj.estimate))
             #estimate is x and y --> impute time of each - fast way to do this? 
-            #then add to dataframe then write data frame 
+            #then add to dataframe then write data frame  
     print(count)
     #save dataframe
 print(peds)
