@@ -60,7 +60,7 @@ def crop_image(image, x, y, width, height):
     image: a cv2 frame
     x, y, width, height: the region to cut out
     """
-    return image[y:y + height, x:x + width]
+    return image[y:height, x:width]
 
 
 def center(points):
@@ -163,7 +163,12 @@ parser.add_argument("--device", type=str, default=None, help="Inference device: 
 parser.add_argument("--track_points", type=str, default="centroid", help="Track points: 'centroid' or 'bbox'")
 parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
 parser.add_argument("--init_delay", type=int, default=None, help="Detection Initialization Delay -  must be less than hit_counter_max (15)")
+#frame = crop_image(frame,200,390,800,720)
+parser.add_argument("--crop", type=int, nargs="+", default= [0,0,750,750], help="Pass list of 4 coordinates (x y x y) to yield ROI")
+
+
 args = parser.parse_args()
+
 
 model = YOLO(args.detector_path, device=args.device)
 
@@ -196,7 +201,7 @@ peds = {}
 count = 0
 for frame in video:
     #check if this is making it a lot slower 
-    frame = crop_image(frame,200,390,800,720)
+    frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
     yolo_detections = model(
         frame,
         conf_threshold=args.conf_thres,
@@ -250,7 +255,7 @@ print(peds)
 log_metric('counts',count)
 
 #mlfow parameters
-log_param('ROI_dim', (200,390,800,720))
+log_param('ROI_dim', args.crop)
 log_param('detector_path',args.detector_path)
 log_param('device', args.device)
 log_param('conf_threshold', args.conf_thres)
