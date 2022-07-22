@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/alec/Desktop/Work/NYU_CUSP/Capstone/norfair/mlruns/0/f972c8321b5d41e1a6298ebecc9bc7ee/artifacts
+end_time: 1658508329426
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: f972c8321b5d41e1a6298ebecc9bc7ee
+run_uuid: f972c8321b5d41e1a6298ebecc9bc7ee
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1658508329414
+status: 3
+tags: []
+user_id: alec
