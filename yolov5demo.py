@@ -251,7 +251,7 @@ for frame in video:
             #then add to dataframe then write data frame  
     print(count)
     #save dataframe
-print(peds)
+#print(peds)
 
 #Time tracker
 end = time.time()
