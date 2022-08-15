@@ -1,0 +1,10 @@
+export PATH="/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/bin:$PATH"
+export PATH="/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/extras/CUPTI/libx64:$PATH"
+export PATH="/c/tools/cuda/bin:$PATH"
+
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\extras\CUPTI\lib64
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\extras\CUPTI\include
+C:\Tools\cudnn-windows-x86_64-8.4.1.50_cuda11.6-archive\bin
+C:\Tools\cudnn-windows-x86_64-8.4.1.50_cuda11.6-archive\include
+
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin

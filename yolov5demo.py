@@ -7,6 +7,7 @@ import torchvision.ops.boxes as bops
 import yolov5
 import pandas as pd 
 import datetime
+import time
 import yaml
 import json
 
@@ -17,6 +18,8 @@ import norfair
 from norfair.tracker import Detection, Tracker
 from norfair.video import Video
 from norfair.drawing import Paths
+
+start = time.time()
 
 DISTANCE_THRESHOLD_BBOX: float = 3.33
 DISTANCE_THRESHOLD_CENTROID: int = 30
@@ -248,8 +251,11 @@ for frame in video:
             #then add to dataframe then write data frame  
     print(count)
     #save dataframe
-print(peds)
+#print(peds)
 
+#Time tracker
+end = time.time()
+total_time = end - start
 
 #mlflow metrics
 log_metric('counts',count)
@@ -261,6 +267,8 @@ log_param('device', args.device)
 log_param('conf_threshold', args.conf_thres)
 log_param('iou_threshold', args.iou_thresh)
 log_param('initialization_delay', args.init_delay)
+log_param('video', args.video)
+log_param('total_time', total_time)
 
 
 #worth it to try getting shape of dataframe? - num of unique IDs?
