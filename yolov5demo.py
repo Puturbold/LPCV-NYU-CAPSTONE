@@ -272,4 +272,4 @@ if not os.path.exists("outputs"):
 #include aggregate count in count.txt
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
-log_artifacts("outputs")
+log_artifacts("outputs") 
