@@ -206,7 +206,7 @@ frame_count = 0
 for frame in video:
     frame_count += 1
     if frame_count % 2 == 0:
-    frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
+        frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
     yolo_detections = model(
         frame,
         conf_threshold=args.conf_thres,
