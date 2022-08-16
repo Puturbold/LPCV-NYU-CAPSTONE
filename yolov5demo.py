@@ -202,7 +202,7 @@ paths_drawer = Paths(center, attenuation=0.01)
 #peds = pd.DataFrame(columns=['ID','Locations'])
 peds = {}
 count = 0
-frame_count = 0
+frame_count = 0 
 for frame in video:
     frame_count += 1
     if frame_count % 2 == 0:
