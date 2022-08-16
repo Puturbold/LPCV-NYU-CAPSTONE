@@ -19,6 +19,7 @@ def onMouse(event, x, y, flags, param):
             g_mouse_button = True
             g_points.append((x,y))
             print('{},{}'.format(x, y))
+        #use these variables, x and y or global ones to feed into main script 
     if event == cv2.EVENT_LBUTTONUP:
         g_mouse_button = False
     g_mouse_x = x
