@@ -6,7 +6,6 @@ import numpy as np
 if TYPE_CHECKING:
     from .tracker import Detection, TrackedObject
 
-
 def frobenius(detection: "Detection", tracked_object: "TrackedObject") -> float:
     """
     Frobernius norm on the difference of the points in detection and the estimates in tracked_object.

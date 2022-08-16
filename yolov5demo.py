@@ -18,7 +18,7 @@ import norfair
 from norfair.tracker import Detection, Tracker
 from norfair.video import Video
 from norfair.drawing import Paths
-from norfair.distances import frobenius, iou_opt
+from norfair.distances import frobenius, iou_opt 
 
 
 start = time.time()
