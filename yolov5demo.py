@@ -18,6 +18,8 @@ import norfair
 from norfair.tracker import Detection, Tracker
 from norfair.video import Video
 from norfair.drawing import Paths
+from norfair.distances import frobenius, iou_opt
+
 
 start = time.time()
 
@@ -182,7 +184,7 @@ model = YOLO(args.detector_path, device=args.device)
 video = Video(camera=0)
 video =Video(input_path=args.video)  if args.video != "0" else video 
 
-distance_function = iou if args.track_points == "bbox" else euclidean_distance
+distance_function = iou_opt if args.track_points == "bbox" else frobenius
 distance_threshold = (
 DISTANCE_THRESHOLD_BBOX
 if args.track_points == "bbox"

@@ -1,4 +1,5 @@
 from .drawing import *
+from .distances import *
 from .tracker import Detection, Tracker
 from .filter import FilterPyKalmanFilterFactory, OptimizedKalmanFilterFactory, NoFilterFactory
 from .utils import get_cutout, print_objects_as_table
