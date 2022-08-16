@@ -58,6 +58,9 @@ cover/
 *.mo
 *.pot
 
+#mp4s
+*.mp4
+
 # Django stuff:
 *.log
 local_settings.py
