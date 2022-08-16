@@ -206,39 +206,46 @@ frame_count = 0
 for frame in video:
     frame_count += 1
     if frame_count % 2 == 0:
-        frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
-        yolo_detections = model(
-            frame,
-            conf_threshold=args.conf_thres,
-            iou_threshold=args.iou_thresh,
-            image_size=args.img_size,
-            classes=args.classes
-        )
-        detections = yolo_detections_to_norfair_detections(yolo_detections, track_points=args.track_points)
-        tracked_objects = tracker.update(detections=detections)
-        if args.track_points == "centroid":
-            norfair.draw_points(frame, detections)
-            norfair.draw_tracked_objects(frame, tracked_objects)
-        elif args.track_points == "bbox":
-            norfair.draw_boxes(frame, detections)
-            norfair.draw_tracked_boxes(frame, tracked_objects)
-        frame = paths_drawer.draw(frame, tracked_objects)
-        video.write(frame)
+    frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
+    yolo_detections = model(
+        frame,
+        conf_threshold=args.conf_thres,
+        iou_threshold=args.iou_thresh,
+        image_size=args.img_size,
+        classes=args.classes
+    )
+    detections = yolo_detections_to_norfair_detections(yolo_detections, track_points=args.track_points)
+    tracked_objects = tracker.update(detections=detections)
+    if args.track_points == "centroid":
+        norfair.draw_points(frame, detections)
+        norfair.draw_tracked_objects(frame, tracked_objects)
+    elif args.track_points == "bbox":
+        norfair.draw_boxes(frame, detections)
+        norfair.draw_tracked_boxes(frame, tracked_objects)
+    frame = paths_drawer.draw(frame, tracked_objects)
+    video.write(frame)
 
-        for obj in tracked_objects:
-            if obj.id in peds.keys():
+    for obj in tracked_objects:
+        if obj.id in peds.keys():
 
-                now = datetime.datetime.now()
-                peds[obj.id].append((obj.estimate[0],now.time()))
+            now = datetime.datetime.now()
+            peds[obj.id].append((obj.estimate[0],now.time()))
 
-            else:
-                count += 1
+        else:
+            count += 1
+            #add new key and value 
 
-                now = datetime.datetime.now()
-                peds[obj.id] = [(obj.estimate[0],now.time())]
+            now = datetime.datetime.now()
+            peds[obj.id] = [(obj.estimate[0],now.time())]
     else:
         pass
-  
+
+            #now = datetime.datetime.now()
+            #peds.loc[len(peds.index)] = [obj.id, tuple(obj.estimate[0])] 
+            #this is not working - increasing count too much somehow? 
+            #peds.append((obj.id,obj.estimate))
+            #estimate is x and y --> impute time of each - fast way to do this? 
+            #then add to dataframe then write data frame  
     print(count)
     #save dataframe
 #print(peds)
@@ -270,4 +277,4 @@ if not os.path.exists("outputs"):
 #include aggregate count in count.txt
 with open("outputs/count.txt", "w") as f:
     f.write(str(peds))
-log_artifacts("outputs") 
+log_artifacts("outputs")
