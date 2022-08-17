@@ -19,6 +19,7 @@ from norfair.tracker import Detection, Tracker
 from norfair.video import Video
 from norfair.drawing import Paths
 from norfair.distances import frobenius, iou_opt 
+from tools import coordinates_checker
 
 
 start = time.time()
@@ -169,7 +170,7 @@ parser.add_argument("--track_points", type=str, default="centroid", help="Track 
 parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
 parser.add_argument("--init_delay", type=int, default=None, help="Detection Initialization Delay -  must be less than hit_counter_max (15)")
 #frame = crop_image(frame,200,390,800,720)
-parser.add_argument("--crop", type=int, nargs="+", default= [0,0,750,750], help="Pass list of 4 coordinates (x y x y) to yield ROI")
+#parser.add_argument("--crop", type=int, nargs="+", default= [0,0,750,750], help="Pass list of 4 coordinates (x y x y) to yield ROI")
 
 
 args = parser.parse_args()
@@ -182,7 +183,7 @@ model = YOLO(args.detector_path, device=args.device)
 ##video = Video(input_path = input_path)
 #may want to incorporate some time thing here so saving data every 5-10
 video = Video(camera=0)
-video =Video(input_path=args.video)  if args.video != "0" else video 
+video =Video(input_path=args.video) if args.video != "0" else video 
 
 distance_function = iou_opt if args.track_points == "bbox" else frobenius
 distance_threshold = (
@@ -202,13 +203,30 @@ paths_drawer = Paths(center, attenuation=0.01)
 #initiating way to save 
 #gonna try dictionary 
 #peds = pd.DataFrame(columns=['ID','Locations'])
+
+#do we want to do an argparse for frame rate skip? - that way can do 1 to not skip any frame
 peds = {}
 count = 0
 frame_count = 0 
+
+coordinates_checker.main()
+#setting variables to global variables from coordinate checker 
+#last 2 points clicked 
+x1 = int(coordinates_checker.g_points[-2][0])
+y1 = int(coordinates_checker.g_points[-2][1])
+x2 = int(coordinates_checker.g_points[-1][0])
+y2 = int(coordinates_checker.g_points[-1][1])
+
+#g_points
+
+#either manually request input for coordinates here OR  figure out how to parse those variables back 
+
 for frame in video:
     frame_count += 1
+    #make this an option so can input 1 so there is no skip 
     if frame_count % 2 == 0:
-        frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
+        #frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
+        frame = crop_image(frame,x1,y1,x2,y2)
         yolo_detections = model(
             frame,
             conf_threshold=args.conf_thres,
