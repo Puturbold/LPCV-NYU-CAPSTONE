@@ -205,6 +205,7 @@ paths_drawer = Paths(center, attenuation=0.01)
 
 # video name to save
 video_name = args.video.split("/")[-1]
+
 obj_id = []
 peds_x = []
 peds_y = []
@@ -258,9 +259,12 @@ for frame in video:
         if frame_count % SaveFrameRate == 0:
             print('saving data')
 
+            if not os.path.exists("outputs"):
+                os.makedirs("outputs")
+
             pd.DataFrame(data={'x_coordinate':peds_x,
                 'y_coordinate': peds_y,
-                'time':peds_time}, index=obj_id).to_csv(f'outputs/output_{video_name}.csv')
+                'time':peds_time}, index=obj_id).to_csv(f'outputs/output_data.csv')
 
 
 
@@ -327,6 +331,6 @@ if not os.path.exists("outputs"):
 print('saving final data')
 pd.DataFrame(data={'x_coordinate':peds_x,
             'y_coordinate': peds_y,
-            'time':peds_time}, index=obj_id).to_csv(f'outputs/output_{video_name}.csv')
+            'time':peds_time}, index=obj_id).to_csv(f'outputs/output_data.csv')
 
 log_artifacts("outputs") 
