@@ -1,0 +1,11 @@
+filterpy==1.4.5
+mlflow==1.27.0
+motmetrics==1.2.0
+numpy==1.23.1
+opencv_python==4.6.0.66
+pandas==1.4.3
+PyYAML==6.0
+rich==12.5.1
+torch==1.12.0
+torchvision==0.13.0
+yolov5==6.1.6
