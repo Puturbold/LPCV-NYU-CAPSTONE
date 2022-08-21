@@ -113,7 +113,7 @@ Accuracy of pedestrian counter can be effected by the input video resolution and
 
 [^1]:Alyamkin, S., Ardi, M., Berg, A. C., Brighton, A., Chen, B., Chen, Y., ... & Zhuo, S. (2019). Low-power computer vision: Status, challenges, and opportunities. IEEE Journal on Emerging and Selected Topics in Circuits and Systems, 9(2), 411-421.
 
-[^2]Chavdarova, T., Baqué, P., Bouquet, S., Maksai, A., Jose, C., Bagautdinov, T., ... & Fleuret, F. (2018). Wildtrack: A multi-camera hd dataset for dense unscripted pedestrian detection. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 5030-5039).
+[^2]:Chavdarova, T., Baqué, P., Bouquet, S., Maksai, A., Jose, C., Bagautdinov, T., ... & Fleuret, F. (2018). Wildtrack: A multi-camera hd dataset for dense unscripted pedestrian detection. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 5030-5039).
 
 [^3]:Kohl, P., Specker, A., Schumann, A., & Beyerer, J. (2020). The mta dataset for multi-target multi-camera pedestrian tracking by weighted distance aggregation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (pp. 1042-1043).
 
