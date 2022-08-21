@@ -67,21 +67,21 @@ We also added in a feature to write the anonymous pedestrian count data to a .cs
 
 ## Performance
 
-### **Table 1:** Overall performance accuracy of model on validation footage from DOT
+**Table 1:** Overall performance accuracy of model on validation footage from DOT
 | Location | Samples | Avg. Percent Error | Med. Percent Error |
 |:----|:----|:----:|:----:|
 |Canal & Baxter|7 15-min videos / 1.75 hours|15.32%|12.05%|
 |Canal & Lafayette|7 15-min videos / 1.75 hours (Day & Night)|6.65%|6.64%|
 |34th & 75th|7 15-min videos / 1.75 hours (Day & Night)|12.54%|13.69%|
 
-### **Table 2:** Power consumption and battery lifetime of different YOLOv5 model weights based on 10,000 mAH battery. 
+**Table 2:** Power consumption and battery lifetime of different YOLOv5 model weights based on 10,000 mAH battery. 
 | YOLOv5 Model Image Size | Speed | Power Consumption | Battery Lifetime |
 |:----|:----:|:----:|:----:|
 |`yolov5s-int8-96_edgetpu.tflite`|11.74 fps|5.010V  0.390A|27 hours|
 |`yolov5s-int8-192_edgetpu.tflite`|9.43 fps|5.015V  0.398A|25 hours|
 |`yolov5s-int8-224_edgetpu.tflite`|8.14 fps|5.016V  0.405A|24.7 hours|
 
-In evaluating Table 2 one may come to the conclusion that the yolov5s-int8-96_edgetpu.tflite model weights were best. However, this table does not include accuracy assessments. The small input image size in yolov5s-int8-96_edgetpu.tflite and yolov5s-int8-192_edgetpu.tflite led to major drop offs in accuracy that rendered the algorithm effectively useless. The accuracy rates observed in Table 2 are from testing with the yolov5s-int8-224_edgetpu.tflite model weight. 
+In evaluating Table 2 one may come to the conclusion that the `yolov5s-int8-96_edgetpu.tflite` model weights were best. However, this table does not include accuracy assessments. The small input image size in `yolov5s-int8-96_edgetpu.tflite` and `yolov5s-int8-192_edgetpu.tflite` led to major drop offs in accuracy that rendered the algorithm effectively useless. The accuracy rates observed in Table 2 are from testing with the `yolov5s-int8-224_edgetpu.tflite` model weight. 
 
 The accuracy rates displayed in Table 1 are in line with industry standard accuracy rates of 85%-95%. This range is based on our conversation with the NYC DOT Pedestrian Unit and their previous experience with other vendors conducting object detection and tracking for pedestrian counting. None of these other parties achieved this accuracy on a low-powered device. 
 
