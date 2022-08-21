@@ -34,7 +34,8 @@ We were able to successfully implement the Norfair framework with the YOLOv5 mod
 
 ## Methodology
 
-*note that the following clips are from private DOT footage and therefore are blurred to protect individual privacy. Reach out to the NYC DOT Pedestrian Unit if you wish to request access to this footage. 
+**note that the following clips are from private DOT footage and therefore are blurred to protect individual privacy. Reach out to the NYC DOT Pedestrian Unit if you wish to request access to this footage.*
+
 The pedestrian counter was validated on pedestrian footage provided by the NYC DOT Pedestrian Unit as part of their bi-annual pedestrian counting program. This program has existed since 2007 and counts pedestrians at 114 different locations across NYC. These counts were previously manual counts (typically a DOT employee with a clipboard at an intersection) but their most recent vendor sets up cameras to facilitate counting. The outbreak of COVID-19 reinvigorated interest and funding for pedestrian counting in NYC to track pandemic and economic recovery. The cameras installed by the DOT vendor typically recorded about 7-12 hours of footage in a day. While the location varies they tried to cover both sides of the street with one camera and were placed about 7-10 feet high. Typical counts are aggregated to 15 minute intervals and would take an average of four to six weeks to collect after gathering the pedestrian footage. 
 Below are three iterations of our model output and performance spanning work from May 2022 through August 2022. By displaying our initial attempts we aim to elucidate challenges we faced and our means of addressing them.
 
@@ -74,12 +75,14 @@ We also added in a feature to write the anonymous pedestrian count data to a .cs
 |Canal & Lafayette|7 15-min videos / 1.75 hours (Day & Night)|6.65%|6.64%|
 |34th & 75th|7 15-min videos / 1.75 hours (Day & Night)|12.54%|13.69%|
 
-**Table 2:** Power consumption and battery lifetime of different YOLOv5 model weights based on 10,000 mAH battery. 
+**Table 2:** Power consumption and battery lifetime of different YOLOv5 model weights based on 10,000 mAH battery 
 | YOLOv5 Model Image Size | Speed | Power Consumption | Battery Lifetime |
 |:----|:----:|:----:|:----:|
 |`yolov5s-int8-96_edgetpu.tflite`|11.74 fps|5.010V  0.390A|27 hours|
 |`yolov5s-int8-192_edgetpu.tflite`|9.43 fps|5.015V  0.398A|25 hours|
 |`yolov5s-int8-224_edgetpu.tflite`|8.14 fps|5.016V  0.405A|24.7 hours|
+
+**Assume battery lifetime will increase in deployment environment on Google Coral Micro(currently unavailable due to supply chain issues)*
 
 In evaluating Table 2 one may come to the conclusion that the `yolov5s-int8-96_edgetpu.tflite` model weights were best. However, this table does not include accuracy assessments. The small input image size in `yolov5s-int8-96_edgetpu.tflite` and `yolov5s-int8-192_edgetpu.tflite` led to major drop offs in accuracy that rendered the algorithm effectively useless. The accuracy rates observed in Table 2 are from testing with the `yolov5s-int8-224_edgetpu.tflite` model weight. 
 
