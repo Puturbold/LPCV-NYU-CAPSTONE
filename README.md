@@ -32,9 +32,61 @@ The weights and class identities we utilized in the Norfair framework are traine
 
 We were able to successfully implement the Norfair framework with the YOLOv5 model weights locally and on the Edge via the Google Coral Dev Board. By building a low-power and remote pedestrian counting device, we provide the City with a scalable and efficient means of tracking pedestrians at various intersections.
 
-## Next Steps
+## Methodology
 
-TBD
+*note that the following clips are from private DOT footage and therefore are blurred to protect individual privacy. Reach out to the NYC DOT Pedestrian Unit if you wish to request access to this footage. 
+The pedestrian counter was validated on pedestrian footage provided by the NYC DOT Pedestrian Unit as part of their bi-annual pedestrian counting program. This program has existed since 2007 and counts pedestrians at 114 different locations across NYC. These counts were previously manual counts (typically a DOT employee with a clipboard at an intersection) but their most recent vendor sets up cameras to facilitate counting. The outbreak of COVID-19 reinvigorated interest and funding for pedestrian counting in NYC to track pandemic and economic recovery. The cameras installed by the DOT vendor typically recorded about 7-12 hours of footage in a day. While the location varies they tried to cover both sides of the street with one camera and were placed about 7-10 feet high. Typical counts are aggregated to 15 minute intervals and would take an average of four to six weeks to collect after gathering the pedestrian footage. 
+Below are three iterations of our model output and performance spanning work from May 2022 through August 2022. By displaying our initial attempts we aim to elucidate challenges we faced and our means of addressing them.
+
+<div align="center">
+    <img src="docs/June.gif" alt="June Progress">
+</div>
+
+The first iteration of our model implemented a threshold based counter by modifying an existing object tracker and detector found here[^Mikel]. The output video includes a total count seen in the top left corner of the video above. Counts increase when pedestrians are identified in the zone between the two green lines. This initial attempt proved quite accurate in pedestrian detection and tracking. However, it was inefficient and battery-intensive when deployed on the Google Coral Dev Board. As mentioned in the Background above, both the solid accuracy and inefficiency on the device resulted from the additional Convolutional Neural Network (CNN) required for the StrongSORT algorithm. This algorithm is effective at maintaining previous identifications even when paths cross. Insofar as our project priority was low-power this strategy was abandoned in favor of the traditional SORT algorithm. SORT requires no secondary CNN and makes predictions of new object location based on past detection and object velocity. 
+
+For a great explanation about the distinction between DeepSORT/StrongSORT and SORT read this[^Sort_blog]. 
+
+Other issues with this iteration pertained to our implementation of the threshold counter. Our model suffered when tracking objects between the lines and at the periphery of the video. Whenever there was an occlusion a pedestrian would often be counted as a new individual and artificially increase the count. As far as scalability, this approach would also require a unique threshold for each location, which would impair deployment. 
+
+<div align="center">
+    <img src="docs/July.gif" alt="July Progess">
+</div>
+
+This iteration of our model saw us shift away from StrongSORT to a traditional SORT algorithm, while continuing to use YOLOv5 for our object detection. From this point forward the model is an implementation of Norfair library from Tryolabs found here[^Norfair]. Only a single CNN (YOLOv5) is used in the model which reduces size, improves speed, and lowers power consumption. Tracking, as mentioned above, uses the SORT algorithm. This involves two key steps: Kalman filter and the Hungarian Algorithm. The Kalman filter uses object velocity to predict its location in a new frame, then updates its beliefs after observing the new position. The Kalman filter is used to measure overlap (Intersection over Union - IOU) between predictions and detections. Then the Hungarian Algorithm helps assign predicted tracks to existing objects/ detections. 
+
+While this output represents an improvement in speed and power consumption over the previous iteration, it still suffers from inaccuracies. This version of the algorithm sometimes counted people in reflections, double counted individuals as they crossed paths, and had steep drop offs in accuracy at the video peripheries. 
+
+<div align="center">
+    <img src="docs/August.gif" alt="August Progress">
+</div>
+
+This video represents output from our final model iteration. It is a direct progression from the previous implementation. The first major change is in the size of the video. We implemented a coordinate checker to allow the user to crop the input video.[^Coordinate_checker] This permits scalable and flexible implementation as the input video region of interest can change in different deployment scenarios. The crop seen in this video cut out certain occlusions and eliminated detection errors at the image periphery. Furthermore, because fewer pixels are passed for model inference, this iteration yielded improvements in accuracy, power consumption, and speed. It is also easy to notice the increased speed of the output video. This is due to the implementation of a frame rate skip. While every frame is initially captured, inference (detection and tracking) is run on every nth frame (default at 2 but can be changed by user when running model). This greatly improves performance speed without suffering a loss in accuracy. This iteration also involved a slight change to the distance calculation in the Kalman filter predictions. The predictions are now based on frobenius distances instead of euclidean distances. This represents a shift from a vector to matrix distance normalization. 
+
+This version of the algorithm also represents the culmination of parameter tuning. The parameters we optimized were confidence threshold, IOU threshold, and initialization delay. These parameters were validated on existing DOT footage (exact statistics available in Performance section below). Confidence threshold represents the percent confidence of the model in its detections. We found performance to be best when this threshold is set between 0.6 and 0.8. The IOU threshold affected the SORT algorithm’s tracked predictions. Model performance was best when the IOU threshold was set at 0.6. Finally, initialization delay indicated the number of frames to wait before detecting, counting, and tracking a new object. This was significant to avoid detections of reflections, people crossing the video at the periphery, and other misidentifications. The ideal value for the initialization delay was 15. 
+We also added in a feature to write the anonymous pedestrian count data to a .csv every x frames (with a default at 50). This prevents data loss and ensures an accurate and live data feed. This saved .csv is passed to the data dashboard for visualization and representation. 
+
+## Performance
+
+### **Table 1:** Overall performance accuracy of model on validation footage from DOT
+| Location | Samples | Avg. Percent Error | Med. Percent Error |
+|:----|:----|:----:|:----:|
+|Canal & Baxter|7 15-min videos / 1.75 hours|15.32%|12.05%|
+|Canal & Lafayette|7 15-min videos / 1.75 hours (Day & Night)|6.65%|6.64%|
+|34th & 75th|7 15-min videos / 1.75 hours (Day & Night)|12.54%|13.69%|
+
+### **Table 2:** Power consumption and battery lifetime of different YOLOv5 model weights based on 10,000 mAH battery. 
+| YOLOv5 Model Image Size | Speed | Power Consumption | Battery Lifetime |
+|:----|:----:|:----:|:----:|
+|`yolov5s-int8-96_edgetpu.tflite`|11.74 fps|5.010V  0.390A|27 hours|
+|`yolov5s-int8-192_edgetpu.tflite`|9.43 fps|5.015V  0.398A|25 hours|
+|`yolov5s-int8-224_edgetpu.tflite`|8.14 fps|5.016V  0.405A|24.7 hours|
+
+In evaluating Table 2 one may come to the conclusion that the yolov5s-int8-96_edgetpu.tflite model weights were best. However, this table does not include accuracy assessments. The small input image size in yolov5s-int8-96_edgetpu.tflite and yolov5s-int8-192_edgetpu.tflite led to major drop offs in accuracy that rendered the algorithm effectively useless. The accuracy rates observed in Table 2 are from testing with the yolov5s-int8-224_edgetpu.tflite model weight. 
+
+The accuracy rates displayed in Table 1 are in line with industry standard accuracy rates of 85%-95%. This range is based on our conversation with the NYC DOT Pedestrian Unit and their previous experience with other vendors conducting object detection and tracking for pedestrian counting. None of these other parties achieved this accuracy on a low-powered device. 
+
+Outside of speed and accuracy, this model represents major improvements to the state of the art in pedestrian counting. First, it is scalable. The deployment of this application on the low-powered Google Coral Dev Board permits easy installation with a removable battery and long periods of inferencing. It is also an immediate upgrade to the DOT’s previous timeline to attain pedestrian counts in four to six weeks. This device is able to provide live counts of pedestrians at a given intersection. Furthermore, as the YOLOv5 model is trained on the expansive COCO dataset there is opportunity for various object counts like cars and bicycles by only slightly changing the deployment call. Finally, the counts are a major improvement in data granularity. Previous DOT counts were aggregated at 15 minute intervals. By consistently updating and appending to .csv, our model achieves nearly live counts and tracks of individual pedestrians while maintaining anonymity.
+
 
 ## Deployment Instructions
 
@@ -146,3 +198,7 @@ Accuracy of pedestrian counter can be effected by the input video resolution and
 [^Mikel]:Mikel Broström (2022). Real-time multi-camera multi-object tracker using YOLOv5 and StrongSORT with OSNet. https://github.com/mikel-brostrom/Yolov5_StrongSORT_OSNet
 
 [^Norfair]:Joaquín Alori, Alan Descoins, KotaYuhara, David, facundo-lezama, Braulio Ríos, fatih, shafu.eth, Agustín Castro, & David Huh. (2022). tryolabs/norfair: v1.0.0 (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.6596178 (https://github.com/tryolabs/norfair)
+
+[^Sort_blog]:Daniel Pleus. (March 2022). Object Tracking - SORT and DeepSort. https://www.linkedin.com/pulse/object-tracking-sort-deepsort-daniel-pleus/?trk=pulse-article_more-articles_related-content-card
+
+[^Coordinate_checker]: Yasunori Shimura. (August 2021). X,Y Coordinates checker. https://github.com/yas-sim/coordinates-checker
