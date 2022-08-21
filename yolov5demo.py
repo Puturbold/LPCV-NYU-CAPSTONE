@@ -199,12 +199,21 @@ paths_drawer = Paths(center, attenuation=0.01)
 
 #initiating way to save 
 #gonna try dictionary 
-#peds = pd.DataFrame(columns=['ID','Locations'])
-peds = {}
+
+video_name = args.video.split("/")[-1]
+peds ={}
+obj_id = []
+peds_x = []
+peds_y = []
+peds_time = []
 count = 0
+SaveFrameRate = 50
+
 frame_count = 0 
 for frame in video:
     frame_count += 1
+
+
     if frame_count % 2 == 0:
         frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
         yolo_detections = model(
@@ -225,17 +234,41 @@ for frame in video:
         frame = paths_drawer.draw(frame, tracked_objects)
         video.write(frame)
 
+        if frame_count % SaveFrameRate == 0:
+            print('saving data')
+
+            pd.DataFrame(data={'x_coordinate':peds_x,
+                'y_coordinate': peds_y,
+                'time':peds_time}, index=obj_id).to_csv(f'outputs/output_{video_name}.csv')
+
+
+
+
         for obj in tracked_objects:
+
             if obj.id in peds.keys():
 
                 now = datetime.datetime.now()
-                peds[obj.id].append((obj.estimate[0],now.time()))
+                #peds[obj.id].append((obj.estimate[0],now.time()))
+                obj_id.append(obj.id)
+                peds_x.append(obj.estimate[0][0])
+                peds_y.append(obj.estimate[0][1])
+                peds_time.append(now.time())
+
+                
+
+            
+
 
             else:
                 count += 1
 
                 now = datetime.datetime.now()
                 peds[obj.id] = [(obj.estimate[0],now.time())]
+        
+    
+
+
     else:
         pass
   
@@ -249,6 +282,7 @@ total_time = end - start
 
 #mlflow metrics
 log_metric('counts',count)
+
 
 #mlfow parameters
 log_param('ROI_dim', args.crop)
@@ -267,7 +301,11 @@ log_param('total_time', total_time)
 #
 if not os.path.exists("outputs"):
     os.makedirs("outputs")
+    
 #include aggregate count in count.txt
-with open("outputs/count.txt", "w") as f:
-    f.write(str(peds))
+print('saving final data')
+pd.DataFrame(data={'x_coordinate':peds_x,
+            'y_coordinate': peds_y,
+            'time':peds_time}, index=obj_id).to_csv(f'outputs/output_{video_name}.csv')
+
 log_artifacts("outputs") 
