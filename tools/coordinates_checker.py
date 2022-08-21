@@ -19,6 +19,7 @@ def onMouse(event, x, y, flags, param):
             g_mouse_button = True
             g_points.append((x,y))
             print('{},{}'.format(x, y))
+        #use these variables, x and y or global ones to feed into main script 
     if event == cv2.EVENT_LBUTTONUP:
         g_mouse_button = False
     g_mouse_x = x
@@ -49,7 +50,7 @@ def main():
     group.add_argument('-i', '--input', type=str, required=False, help='Input image file name')
     group.add_argument('-c', '--cam', type=int, required=False, help='number of webCam. starts from 0')
     group.add_argument('-v', '--video', type=str, required=False, help='Input video file name')
-    args = parser.parse_args()
+    args,extras = parser.parse_known_args()
 
     movie_flag = False
     img_x, img_y = (640, 480)       # default image size

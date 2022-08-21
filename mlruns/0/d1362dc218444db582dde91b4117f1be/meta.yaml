@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/alec/Desktop/Work/NYU_CUSP/Capstone/norfair/mlruns/0/d1362dc218444db582dde91b4117f1be/artifacts
+end_time: 1660756627742
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: d1362dc218444db582dde91b4117f1be
+run_uuid: d1362dc218444db582dde91b4117f1be
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1660756627262
+status: 3
+tags: []
+user_id: putur
