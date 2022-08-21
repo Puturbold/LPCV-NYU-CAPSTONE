@@ -1,6 +1,8 @@
-<img src="docs/NYC_MOCT.png" alt="NYC MOCT Logos" width="200">
-<img src="docs/nyc-dot-logo.png" alt="NYC DOT Logo" width="200">
-<img src="docs/NYU-Emblem.png" alt="NYU CUSP logo" width="200">
+<div align="center">
+    <img src="docs/NYC_MOCT.png" alt="NYC MOCT Logos" width="200">
+    <img src="docs/nyc-dot-logo.png" alt="NYC DOT Logo" width="200">
+    <img src="docs/NYU-Emblem.png" alt="NYU CUSP logo" width="200">
+</div>
 
 ## Abstract
 
@@ -39,8 +41,8 @@ TBD
 
 We recommend creating a new conda environment before installation and deployment
 ```bash
-conda create --name myenv
-conda activate myenv
+conda create --name LPCV
+conda activate LPCV
 ```
 
 Clone repo and install [requirements.txt](https://github.com/ultralytics/yolov5/blob/master/requirements.txt) in a
@@ -89,13 +91,19 @@ python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --video
 python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --device cuda --video movie.mp4 -init_delay 15
 ```
 
-### Tuning Instructions:
+### Tuning and Testing Guide:
 
 Tracked parameters log can be accessed by running mlflow server on local machine with following command and following locally hosted url
 
 ```sh
 mlflow ui
 ```
+
+Running yolov5pedestrian.py on CUDA device requires an cuda enable computer with required cuda software. Reference NVIDIA installation page https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html
+
+### Video Cropping Guide:
+
+
 
 ## References
 
