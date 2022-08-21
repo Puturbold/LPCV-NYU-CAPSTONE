@@ -115,17 +115,17 @@ Accuracy of pedestrian counter can be effected by the input video resolution and
 
 Chavdarova, T., Baqué, P., Bouquet, S., Maksai, A., Jose, C., Bagautdinov, T., ... & Fleuret, F. (2018). Wildtrack: A multi-camera hd dataset for dense unscripted pedestrian detection. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 5030-5039).
 
-Kohl, P., Specker, A., Schumann, A., & Beyerer, J. (2020). The mta dataset for multi-target multi-camera pedestrian tracking by weighted distance aggregation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (pp. 1042-1043).
+[^3]:Kohl, P., Specker, A., Schumann, A., & Beyerer, J. (2020). The mta dataset for multi-target multi-camera pedestrian tracking by weighted distance aggregation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (pp. 1042-1043).
 
-Kumar, S. A., Yaghoubi, E., Das, A., Harish, B. S., & Proença, H. (2020). The p-destre: A fully annotated dataset for pedestrian detection, tracking, and short/long-term re-identification from aerial devices. IEEE Transactions on Information Forensics and Security, 16, 1696-1708.
+[^4]:Kumar, S. A., Yaghoubi, E., Das, A., Harish, B. S., & Proença, H. (2020). The p-destre: A fully annotated dataset for pedestrian detection, tracking, and short/long-term re-identification from aerial devices. IEEE Transactions on Information Forensics and Security, 16, 1696-1708.
 
 Jia, X., Zhu, C., Li, M., Tang, W., & Zhou, W. (2021). LLVIP: A Visible-infrared Paired Dataset for Low-light Vision. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 3496-3504).
 
 Zhang, L., Shi, M., & Chen, Q. (2018, March). Crowd counting via scale-adaptive convolutional neural network. In 2018 IEEE Winter Conference on Applications of Computer Vision (WACV) (pp. 1113-1121). IEEE.
 
-Li, W., Zhao, R., Xiao, T., & Wang, X. (2014). Deepreid: Deep filter pairing neural network for person re-identification. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 152-159).
+[^7]:Li, W., Zhao, R., Xiao, T., & Wang, X. (2014). Deepreid: Deep filter pairing neural network for person re-identification. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 152-159).
 
-Yang, D., Yurtsever, E., Renganathan, V., Redmill, K. A., & Özgüner, Ü. (2021). A vision-based social distancing and critical density detection system for COVID-19. Sensors, 21(13), 4608.
+[^8]:Yang, D., Yurtsever, E., Renganathan, V., Redmill, K. A., & Özgüner, Ü. (2021). A vision-based social distancing and critical density detection system for COVID-19. Sensors, 21(13), 4608.
 
 Yang, H., Zhou, Q., Ni, J., Li, H., & Shen, X. (2020). Accurate image-based pedestrian detection with privacy preservation. IEEE Transactions on Vehicular Technology, 69(12), 14494-14509.
 
