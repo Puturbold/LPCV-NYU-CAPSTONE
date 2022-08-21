@@ -35,7 +35,67 @@ TBD
 
 ## Deployment Instructions
 
-TBD
+### Install:
+
+We recommend creating a new conda environment before installation and deployment
+```bash
+conda create --name myenv
+conda activate myenv
+```
+
+Clone repo and install [requirements.txt](https://github.com/ultralytics/yolov5/blob/master/requirements.txt) in a
+[**Python>=3.6.0**](https://www.python.org/) environment
+
+```bash
+git clone https://github.com/Puturbold/LPCV-NYU-CAPSTONE.git  # clone
+cd LPCV-NYU-CAPSTONE
+pip install -r requirements.txt  # install
+```
+
+### How to run:  
+```sh
+python yolov5pedestrian.py --classes 0 --video video_file_path
+```
+
+| options| description|
+|----|----|
+|Coordinate Checker Arguments|
+|`-i` or `--input`|Input image file name|
+|`-s` or `--size`|Size of image (tool will create gray image with this size)|
+|`-c` or `--cam`|ID number of webCam (camera). Starting from 0|
+|`-sc` or `--scale`|Scale factor of display image. Display image size will be 1/2 when 2 is specified|
+|Pedestrian Counter Arguments
+|`--detector_path`|Yolov5 model path. Default is "yolov5m6.pt"|
+|`--img_size`|YOLOv5 inference size (pixels). Default is "720"|
+|`--conf_thres`|YOLOv5 object confidence threshold. Default is "0.25", pedestrian counter works best between 0.6-0.8|
+|`--iou_thresh`|YOLOv5 IOU threshold for NMS. Default is "0.45", pedestrian counter works best at 0.6|
+|`--classes`|Filter by class: --classes 0, or --classes 0 2 3, see COCO_classes.txt for full list|
+|`--device`|Inference device: "cpu" or "cuda". Default is none, run default for edge deployment|
+|`--track_points`|Track points: 'centroid' or 'bbox'. Default is "centroid"|
+|`--video`|Put the video path - or 0 for camera. Default is 0, run default for edge deployment|
+|`--init_delay`|Detection Initialization Delay -  must be less than hit_counter_max (15). Pedestrian counter works best at 15|
+
+Following key commands only work for Coordinate checker UI
+|key|description|
+|----|----|
+|`ESC`|Exit program|
+|`p` or `<space>`|Pause / resume movie|
+
+### Command line examples:  
+
+```sh
+python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --video movie.mp4 --init_delay 15
+python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --video 0 --init_delay 15
+python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --device cuda --video movie.mp4 -init_delay 15
+```
+
+### Tuning Instructions:
+
+Tracked parameters log can be accessed by running mlflow server on local machine with following command and following locally hosted url
+
+```sh
+mlflow ui
+```
 
 ## References
 
