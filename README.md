@@ -4,9 +4,19 @@
     <img src="docs/NYU-Emblem.png" alt="NYU CUSP logo" width="250">
 </div>
 
+
 ## Abstract
 
 *Data on pedestrian traffic flows and counts can be extremely useful for city planning. Which is why NYC has held a bi-annual pedestrian count in 114 key locations around the city. However this method is very limited, time consuming and expensive. The use of low-power, cost-effective AI chips such as Google’s Coral Edge TPU can reduce cost and flexibility of pedestrian counting. We successfully deployed a pedestrian counting algorithm based on the YOLOv5 object detection model and a SORT algorithm for object tracking on the Google Coral Dev Board. We achieved industry standard rates of accuracy between 85%-95% while deploying in a low-power setting. This proved significant due to the general tradeoff between accuracy and power efficiency. Accuracy was determined by running the model on existing NYC DOT Pedestrian Unit footage with matching count data. By running inference directly on the device we preserve pedestrian privacy and facilitate installation and deployment. This prototype represents an improvement to the current DOT counting process as it vastly improves data granularity (from 15 minute aggregates to anonymized individual tracking), data turnaround (from 4-6 weeks to live data), and future scalability and flexibility. Future work should aim to use transfer learning to train a pedestrian identifier from scratch and expand the use case to include bikes, cars, and micromobile modes of transport.*
+
+## Team Members and Project Website
+
+[Project Website And Dashboard](https://lpcv.netlify.app/)
+
+- Abdulaziz Alaql
+- Alec Bardey
+- Turbold Baatarchuluu
+- Branden DuPont
 
 ## Goal
 
