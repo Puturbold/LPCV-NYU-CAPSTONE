@@ -169,7 +169,13 @@ parser.add_argument("--device", type=str, default=None, help="Inference device: 
 parser.add_argument("--track_points", type=str, default="centroid", help="Track points: 'centroid' or 'bbox'")
 parser.add_argument("--video", type=str, default="0", help="put the video path - or 0 for camera")
 parser.add_argument("--init_delay", type=int, default=None, help="Detection Initialization Delay -  must be less than hit_counter_max (15)")
+parser.add_argument("--save_frame_rate", type=int, default=100, help="Number of frames between updates to dataframe")
+parser.add_argument("--frame_rate_skip", type=int, default=2, help="Number of frames to skip - 1 indicates no skipping - default 2")
+
+#--save_frame_rate
+#--frame_rate_skip
 #frame = crop_image(frame,200,390,800,720)
+#add in argument for SaveFrameRate and frame rate skip 
 #parser.add_argument("--crop", type=int, nargs="+", default= [0,0,750,750], help="Pass list of 4 coordinates (x y x y) to yield ROI")
 
 
@@ -214,7 +220,7 @@ peds_time = []
 #do we want to do an argparse for frame rate skip? - that way can do 1 to not skip any frame
 peds = {}
 count = 0
-SaveFrameRate = 50
+SaveFrameRate = args.save_frame_rate
 
 frame_count = 0 
 
@@ -235,7 +241,7 @@ for frame in video:
 
 
     #make this an option so can input 1 so there is no skip 
-    if frame_count % 2 == 0:
+    if frame_count % args.frame_rate_skip == 0:
         #frame = crop_image(frame,args.crop[0],args.crop[1],args.crop[2],args.crop[3])
         frame = crop_image(frame,x1,y1,x2,y2)
         yolo_detections = model(
