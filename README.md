@@ -148,6 +148,8 @@ python yolov5pedestrian.py --classes 0 --video video_file_path
 |`--track_points`|Track points: 'centroid' or 'bbox'. Default is "centroid"|
 |`--video`|Put the video path - or 0 for camera. Default is 0, run default for edge deployment|
 |`--init_delay`|Detection Initialization Delay -  must be less than hit_counter_max (15). Pedestrian counter works best at 15|
+|`--save_frame_rate`|Number of frames between updates to output dataframe|
+|`--frame_rate_skip`|Number of frames to skip - 1 indicates no skipping - default 2|
 
 Following key commands only work for Coordinate checker UI
 |key|description|
@@ -160,7 +162,7 @@ Following key commands only work for Coordinate checker UI
 ```sh
 python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --video movie.mp4 --init_delay 15
 python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --video 0 --init_delay 15
-python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --device cuda --video movie.mp4 -init_delay 15
+python yolov5pedestrian.py --conf_thres 0.6 --iou_thresh 0.6 --classes 0 --device cuda --video movie.mp4 --init_delay 15 --frame_rate_skip 4
 ```
 
 ### Tuning and Testing Guide:

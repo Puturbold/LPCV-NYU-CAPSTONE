@@ -324,6 +324,7 @@ log_param('iou_threshold', args.iou_thresh)
 log_param('initialization_delay', args.init_delay)
 log_param('video', args.video)
 log_param('total_time', total_time)
+log_param('frame_rate_skip',args.frame_rate_skip)
 
 
 
