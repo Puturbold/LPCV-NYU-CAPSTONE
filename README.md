@@ -44,6 +44,10 @@ We were able to successfully implement the Norfair framework with the YOLOv5 mod
 
 ## Methodology
 
+<div align="center">
+    <img src="docs/Blank diagram.png" alt="MLProcess">
+</div>
+
 **note that the following clips are from private DOT footage and therefore are blurred to protect individual privacy. Reach out to the NYC DOT Pedestrian Unit if you wish to request access to this footage.*
 
 The pedestrian counter was validated on pedestrian footage provided by the NYC DOT Pedestrian Unit as part of their bi-annual pedestrian counting program. This program has existed since 2007 and counts pedestrians at 114 different locations across NYC. These counts were previously manual counts (typically a DOT employee with a clipboard at an intersection) but their most recent vendor sets up cameras to facilitate counting. The outbreak of COVID-19 reinvigorated interest and funding for pedestrian counting in NYC to track pandemic and economic recovery. The cameras installed by the DOT vendor typically recorded about 7-12 hours of footage in a day. While the location varies they tried to cover both sides of the street with one camera and were placed about 7-10 feet high. Typical counts are aggregated to 15 minute intervals and would take an average of four to six weeks to collect after gathering the pedestrian footage. 
